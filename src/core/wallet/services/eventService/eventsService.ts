@@ -96,6 +96,16 @@ export class EventService {
         })
       );
     }
-  };
+  }
+
+  public acceptArianeeEvent = (eventId)=>{
+    return this.contractService.storeContract.methods
+      .acceptEvent(eventId,this.configurationService.arianeeConfiguration.walletReward.address).send();
+  }
+
+  public refuseArianeeEvent = (eventId)=>{
+    return this.contractService.storeContract.methods
+      .refuseEvent(eventId,this.configurationService.arianeeConfiguration.walletReward.address).send();
+  }
 
 }
