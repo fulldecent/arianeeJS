@@ -52,7 +52,7 @@ export class ArianeeHttpClient {
 
     const RPCRes = await this.fetchWithCache(endpoint, config);
 
-    return JSON.parse(RPCRes.result);
+    return (typeof(RPCRes.result) === "string")? JSON.parse(RPCRes.result) : RPCRes.result;
   }
 
   /**
