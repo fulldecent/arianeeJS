@@ -19,7 +19,7 @@ import {Web3Service} from "../web3Service/web3Service";
 @injectable()
 export class CertificateService {
 
-    constructor(
+    constructor (
         private utils: UtilsService,
         private httpClient: ArianeeHttpClient,
         private configurationService: ConfigurationService,
@@ -83,7 +83,7 @@ export class CertificateService {
         );
 
         if (content) {
-            const certificateSchema = await this.httpClient.fetch(
+            const certificateSchema = await this.httpClient.fetchWithCache(
                 content.$schema
             );
 
@@ -106,7 +106,7 @@ export class CertificateService {
                 passphrase,
                 certificateId: certificateId
             }));
-    };
+    }
 
     private customRequestTokenFactory = (certificateId, passphrase) => {
         const temporaryWallet = this.configurationService
@@ -126,7 +126,7 @@ export class CertificateService {
             this.configurationService.arianeeConfiguration.brandDataHubReward.address,
             proof.signature
         );
-    };
+    }
 
     public isCertificateOwnershipRequestable = async (
         certificateId,
@@ -147,7 +147,7 @@ export class CertificateService {
                 message: "certificate is not requestable"
             };
         }
-    };
+    }
 
     public getCertificate = async (
         certificateId: CertificateId,
@@ -214,7 +214,7 @@ export class CertificateService {
         }
 
         return response.build();
-    };
+    }
 
     public getMyCertificates = async (
         query?: ConsolidatedCertificateRequest
@@ -251,7 +251,7 @@ export class CertificateService {
         );
 
         return results.reverse();
-    };
+    }
 
     public getMyCertificatesGroupByIssuer = async (query?: ConsolidatedCertificateRequest)
         : Promise<{ [key: string]: CertificateSummary[] }> => {
@@ -270,7 +270,7 @@ export class CertificateService {
             }, {});
 
         return groupByIssuerCertificates;
-    };
+    }
 
     public createCertificateRequestOwnershipLink = async (
         certificateId: number,
@@ -282,9 +282,9 @@ export class CertificateService {
         await this.setPassphrase(certificateId, passphrase, 1);
 
         return this.utils.createLink(certificateId, passphrase);
-    };
+    }
 
-    private async setPassphrase(
+    private async setPassphrase (
         certificateId: number,
         passphrase: string,
         type: number
@@ -308,12 +308,12 @@ export class CertificateService {
         await this.setPassphrase(certificateId, passphrase, 2);
 
         return this.utils.createLink(certificateId, passphrase, "proof");
-    };
+    }
 
     // Ajouter une passphrase à un token
     //  this.smartAssetContract.methods.addTokenAccess()
 
-    public getCertificateFromLink(link: string) {
+    public getCertificateFromLink (link: string) {
         const {certificateId, passphrase} = this.utils.readLink(link);
 
         return this.getCertificate(certificateId, passphrase);
@@ -324,7 +324,7 @@ export class CertificateService {
         passphrase: string
     ): Promise<ExtendedBoolean> => {
         return this.isProofValidSince(certificateId, passphrase, 2, 300);
-    };
+    }
 
     private isProofValid = async (
         certificateId,
@@ -343,7 +343,7 @@ export class CertificateService {
         } else {
             return proof === tokenHashedAccess;
         }
-    };
+    }
 
     private isProofValidSince = (
         certificateId: number,
@@ -419,13 +419,13 @@ export class CertificateService {
                 message: "proof is valid"
             });
         });
-    };
+    }
 
     public customRequestToken = async (
         certificateId: number,
         passphrase: string
     ) => {
         return this.customRequestTokenFactory(certificateId, passphrase).send();
-    };
+    }
 
 }

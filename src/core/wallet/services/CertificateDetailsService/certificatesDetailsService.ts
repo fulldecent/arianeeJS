@@ -1,12 +1,12 @@
 import {inject, injectable, singleton} from "tsyringe";
 import {CertificateId} from "../../../../models/CertificateId";
-import {CertificateSummaryBuilder} from "../../certificateSummary";
-import {UtilsService} from "../utilService/utilsService";
 import {ArianeeHttpClient} from "../../../libs/arianeeHttpClient/arianeeHttpClient";
+import {CertificateSummaryBuilder} from "../../certificateSummary";
 import {ArianeeWallet} from "../../wallet";
 import {ConfigurationService} from "../configurationService/configurationService";
 import {ContractService} from "../contractService/contractsService";
 import {IdentityService} from "../identityService/identityService";
+import {UtilsService} from "../utilService/utilsService";
 import {WalletService} from "../walletService/walletService";
 
 @injectable()
@@ -52,7 +52,7 @@ export class CertificateDetails {
       .call();
     const identity = await this.identityService.getIdentity(issuer);
 
-    return this.httpClient.RPCCall(
+    return this.httpClient.RPCCallWithCache(
       identity.data.rpcEndpoint,
       "certificate.read",
       {
@@ -112,7 +112,7 @@ export class CertificateDetails {
         proof
       );
 
-      const certificateSchema = await this.httpClient.fetch(
+      const certificateSchema = await this.httpClient.fetchWithCache(
         certificateContentData.$schema
       );
 
